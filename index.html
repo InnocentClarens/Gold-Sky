@@ -134,29 +134,29 @@
                 Seat Selected : 
                 <span id="count">0</span> seat  &nbsp;|&nbsp;          
                 Total Payment : <span id="total">0</span> $
-                <a href="Passenger.html" class="btn btn-primary" id="butt">
+                <a href="passenger.html" class="btn btn-primary" id="butt">
                      Continue
                 </a>
             </p>
         </div>
         <div class="bg"></div>
     <script>
-  // --- Elements ---
+  // Elements 
   const destination = document.getElementById('destination');
   const pricePerSeatEl = document.getElementById('priceperseat');
   const totalEl = document.getElementById('total');
   const countEl = document.getElementById('count');
 
-  // IMPORTANT: match the class used in your HTML ("occupited")
+  // match the class used in your HTML ("occupited")
   const seats = document.querySelectorAll('.row .seat:not(.occupited)');
 
   // Use the actual button id you have in HTML (id="butt")
   const continueBtn = document.getElementById('butt');
 
-  // --- State ---
+  //  State 
   let pricePerSeat = Number(destination.value || 0);
 
-  // --- Helpers ---
+  //  Helpers 
   function formatMoney(n) {
     return Number(n || 0).toFixed(2);
   }
@@ -173,10 +173,10 @@
     recalc();
   }
 
-  // --- Init price display ---
+  //  price display 
   setPriceFromDestination();
 
-  // --- Seat click handling ---
+  // Seat click handling
   seats.forEach(seat => {
     seat.addEventListener('click', () => {
       seat.classList.toggle('selected');
@@ -184,10 +184,10 @@
     });
   });
 
-  // --- Destination price change ---
+  //  Destination price change 
   destination.addEventListener('change', setPriceFromDestination);
 
-  // --- Continue button ---
+  //  Continue button 
   continueBtn.addEventListener('click', (e) => {
     const selected = document.querySelectorAll('.row .seat.selected');
     if (selected.length === 0) {
@@ -205,9 +205,6 @@
     sessionStorage.setItem('pricePerSeat', String(pricePerSeat));
     sessionStorage.setItem('total', String(selected.length * pricePerSeat));
 
-    // If you plan to navigate via JS instead of the link's href, uncomment:
-    // e.preventDefault();
-    // location.assign('Passenger.html');
   });
 </script>
 
