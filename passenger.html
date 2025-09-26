@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Passenger</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+             body{
+                background-color: rgb(120, 167, 208);
+                background-image: url(featured-1.jpg.webp);
+                background-size: cover;
+                background-repeat: no-repeat;
+                font-size: large;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+            }
+            .card{ max-width: 900px; margin: 24px auto;}
+            .passenger-block {padding: 12px; border: 1px solid #eaeaea; border-radius: 8px; background: #fff;}
+        </style>
+    </head>
+    <body>
+        <div class="card shadow">
+            <div class="card body">
+                <h1 class="card-title  mb-3">Passenger Details</h1>
+                <p id="seatCountMsg" class="text-muted"></p>
+
+                <form id="passengerForm" novalidate>
+                <div id="passengerFields" class="vstack gap-3"></div>
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="index.html" class="btn btn-outline-secondary">Back</a> 
+                    <br>
+                    
+                </br>
+                    <a href="Confirmation.html" class="btn btn-primary">Continue to purchase
+                        
+                        </a>
+                </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+    // Read count saved by the seat page
+    const savedCount = Number(sessionStorage.getItem('seatCount') || 0);
+    const savedIndexes = JSON.parse(sessionStorage.getItem('selectedSeats') || '[]');
+    const fallbackIndexes = JSON.parse(localStorage.getItem ('selectedSeats') || '[]');
+
+    //Use count first; fall back to number of indexes
+    const seatCount = savedCount ||savedIndexes.length || fallbackIndexes.length;
+
+    if (!seatCount) {
+        window.location.href = "index.html"
+    }
+    
+     
+
+    // Show message
+    document.getElementById('seatCountMsg').textContent =
+      `You selected ${seatCount} seat${seatCount > 1 ? 's' : ''}. Please enter passenger info below.`;
+
+    // Generate fields
+    const fields = document.getElementById('passengerFields');
+    
+    for (let i = 1; i <= seatCount; i++) {
+      const block = document.createElement('div');
+      block.className = 'passenger-block';
+      block.innerHTML = `
+        <h6 class="mb-3">Passenger ${i}</h6>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label" for="first_${i}">First Name*</label>
+              <input id="first_${i}" type="text" class="form-control" name="first_${i}" required autocomplete="given-name">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="middle_${i}">Middle Name</label>
+              <input id="middle_${i}" type="text" class="form-control" name="middle_${i}" autocomplete="additional-name">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="last_${i}">Last Name*</label>
+              <input id="last_${i}" type="text" class="form-control" name="last_${i}" required autocomplete="family-name">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label" for="phone_${i}">Phone*</label>
+              <input id="phone_${i}" type="tel" class="form-control" name="phone_${i}" required
+                     pattern="^[0-9+()\\\-\\s]{7,}$" placeholder="+1 (555) 555-5555" autocomplete="tel">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="email_${i}">Email*</label>
+              <input id="email_${i}" type="email" class="form-control" name="email_${i}" required autocomplete="email">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="ktn_${i}">Known Traveler Number</label>
+              <input id="ktn_${i}" type="text" class="form-control" name="ktn_${i}"
+                     pattern="^[A-Za-z0-9]{7,20}$" placeholder="e.g., TT1234567">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label" for="dob_${i}">Date of Birth*</label>
+              <input id="dob_${i}" type="date" class="form-control" name="dob_${i}" required autocomplete="bday">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="goldsky_${i}">Free GoldSky Number</label>
+              <input id="goldsky_${i}" type="text" class="form-control" name="goldsky_${i}" pattern="^GS\\s?\\d{4,}$" placeholder="GS 949284">
+            </div>
+
+            <div class="col-md-8">
+              <label class="form-label" for="address_${i}">Address*</label>
+              <input id="address_${i}" type="text" class="form-control" name="address_${i}" required autocomplete="address-line1">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="city_${i}">City*</label>
+              <input id="city_${i}" type="text" class="form-control" name="city_${i}" required autocomplete="address-level2">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="state_${i}">State*</label>
+              <input id="state_${i}" type="text" class="form-control" name="state_${i}" required autocomplete="address-level1">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="zip_${i}">Zip Code*</label>
+              <input id="zip_${i}" type="text" class="form-control" name="zip_${i}"
+                     required pattern="^\\d{5}(-\\d{4})?$" placeholder="12345 or 12345-6789" autocomplete="postal-code">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="country_${i}">Country*</label>
+              <input id="country_${i}" type="text" class="form-control" name="country_${i}" required autocomplete="country-name">
+        </div>
+      `;
+      fields.appendChild(block);
+    }
+
+    // Handle submit
+    document.getElementById('passengerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      //
+      console.log("seatCount =", typeof seatCount, seatCount);
+      const form = e.target;
+
+      if (!form.checkValidity()) {
+    const firstInvalid = form.querySelector(":invalid");
+    if (firstInvalid) {
+      console.warn("First invalid field:", firstInvalid.name || firstInvalid.id, firstInvalid);
+      firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+      firstInvalid.reportValidity();
+      alert("Please fix the highlighted field and try again.");
+    } else {
+      // Fallback just in case
+      form.reportValidity();
+    }
+    return;
+      }
+
+      // Collect passenger data
+      const passengers = [];
+      for (let i = 1; i <= seatCount; i++) {
+        passengers.push({
+          name: form[`name_${i}`].value.trim(),
+          phone: form[`phone_${i}`].value.trim(),
+          email: form[`email_${i}`].value.trim(),
+           ktn: (form[`ktn_${i}`] ? form[`ktn_${i}`].value.trim() : ""),
+            dob: form[`dob_${i}`].value,
+            goldsky: (form[`goldsky_${i}`] ? form[`goldsky_${i}`].value.trim() : ""),
+            address: form[`address_${i}`].value.trim(),
+            city: form[`city_${i}`].value.trim(),
+            state: form[`state_${i}`].value.trim(),
+            zip: form[`zip_${i}`].value.trim(),
+            country: form[`country_${i}`].value.trim(),
+        });
+      }
+
+      // Save and go to confirmation/payment
+      sessionStorage.setItem('passengers', JSON.stringify(passengers));
+      const target = "Confirmation.html";
+      console.log("Navigation to", target, "from", location.href);
+      location.assign(target);
+      
+    });
+
+</script>
+    </body>
+</html>
